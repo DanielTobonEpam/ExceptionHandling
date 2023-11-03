@@ -29,8 +29,8 @@ namespace Task2
             {
                 Console.WriteLine(ex.Message);
             }
-            return Convert.ToInt32(stringValue);
 
+            return Convert.ToInt32(stringValue);
         }
     }
 }
