@@ -7,35 +7,30 @@ namespace Task2
     {
         public int Parse(string stringValue)
         {
-            if (stringValue == null)
+
+            try
             {
-                throw new ArgumentNullException("Null exception in Parse method: stringValue cannot be null");
+                if (stringValue == null)
+                {
+                    throw new ArgumentNullException("Null exception in Parse method: stringValue cannot be null");
+                }
+
+
+                if (Convert.ToInt32(stringValue) > int.MaxValue || Convert.ToInt32(stringValue) < int.MinValue)
+                {
+                    throw new OverflowException($"Over flow exception in Parse method: '{stringValue}' is out of range");
+                }
             }
-            if (int.Parse(stringValue) > 2147483647 || int.Parse(stringValue) < -2147483648) 
+            catch (FormatException ex)
             {
-                throw new OverflowException($"Over flow exception in Parse method: '{stringValue}' is out of range");
+                throw new FormatException("Invalid format for integer " + stringValue, ex);
             }
-
-            // Try to parse the string as an integer.
-            if (!int.TryParse(stringValue, out int number))
+            catch (NotImplementedException ex)
             {
-                throw new FormatException($"Could not parse the string '{stringValue}' as an integer.");
+                Console.WriteLine(ex.Message);
             }
-            return number;
+            return Convert.ToInt32(stringValue);
 
-            ////Invalid Number Format
-            //int n;
-            //try
-            //{
-            //    n = int.Parse(stringValue);
-            //}
-            //catch (FormatException e)
-            //{
-
-            //    throw new FormatException("Invalid format exception in Parse method: stringValue cannot be null",e);
-            //}
-
-            //throw new NotImplementedException();
         }
     }
 }
