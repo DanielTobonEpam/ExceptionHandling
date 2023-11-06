@@ -19,14 +19,17 @@ namespace Task1
                 {
                     Console.WriteLine(input[0]);
                     Console.WriteLine("Enter another word");
-                    input = Console.ReadLine();
-                    
+                    input = Console.ReadLine();                    
                 }
                 Console.WriteLine(input[0]);
             }
             catch (ArgumentException ex)
             {
-                throw new ArgumentNullException("Input line cannot be empty.", ex);
+                Console.WriteLine(ex.Message);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
