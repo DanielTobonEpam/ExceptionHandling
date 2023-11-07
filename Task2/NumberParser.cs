@@ -12,21 +12,30 @@ namespace Task2
             {
                 throw new ArgumentNullException("Null exception in Parse method: stringValue cannot be null");
             }
-            if (Convert.ToInt32(stringValue) > int.MaxValue || Convert.ToInt32(stringValue) < int.MinValue)
+
+            stringValue = stringValue.Trim();
+
+            if (string.IsNullOrEmpty(stringValue))
             {
-                throw new OverflowException($"Over flow exception in Parse method: '{stringValue}' is out of range");
+                throw new FormatException();
             }
 
             int integerValue = 0;
             bool isNegative = false;
+
             try
             {
-                // Check negative sign.
+                // Check the signs.
                 if (stringValue[0] == '-')
                 {
                     isNegative = true;
                     stringValue = stringValue.Substring(1);
                 }
+                else if (stringValue[0] == '+')
+                {
+                    stringValue = stringValue.Substring(1);
+                }
+
                 //convert a string to an integer without using any native parsing of C#
                 foreach (char character in stringValue)
                 {
@@ -34,21 +43,44 @@ namespace Task2
                     {
                         int digitValue = character - '0';
 
+                        // Check for potential overflow 
+                        if (IsOverflow(integerValue, digitValue, isNegative))
+                        {
+                            throw new OverflowException("Value is out of Int32 range");
+                        }
+
                         integerValue *= 10;
                         integerValue += digitValue;
                     }
+                    else
+                    {
+                        throw new FormatException();
+                    }
+
                 }
+            }
+            catch (OverflowException ex)
+            {
+                throw new OverflowException("Invalid format for integer " + ex);
             }
             catch (FormatException ex)
             {
-                throw new FormatException("Invalid format for integer " + stringValue, ex);
+                throw new FormatException("Invalid format for integer " + ex);
             }
-            catch (NotImplementedException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
             // Return the integer value, with the negative sign if applicable.
             return isNegative ? -integerValue : integerValue;
+        }
+        private bool IsOverflow(int integerValue, int digitValue, bool isNegative)
+        {
+            if (isNegative)
+            {
+                return integerValue < (int.MinValue + digitValue) / 10;
+            }
+            else
+            {
+                return integerValue > (int.MaxValue - digitValue) / 10;
+            }
         }
     }
 }
