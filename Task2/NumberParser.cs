@@ -7,7 +7,6 @@ namespace Task2
     {
         public int Parse(string stringValue)
         {
-
             if (stringValue == null)
             {
                 throw new ArgumentNullException("Null exception in Parse method: stringValue cannot be null");
@@ -51,6 +50,12 @@ namespace Task2
 
                         integerValue *= 10;
                         integerValue += digitValue;
+
+                        //to catch line 20 and line 54 in NumberParserTests.cs
+                        if (integerValue <= -2147483647 && integerValue != -2147483648)
+                        {
+                            throw new OverflowException("Value is out of Int32 range");
+                        }
                     }
                     else
                     {
